@@ -1,4 +1,5 @@
-﻿using JsonConverter.Model;
+﻿using JsonConverter.Extensions;
+using JsonConverter.Model;
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
@@ -77,8 +78,8 @@ namespace JsonConverter.Logic
                     {
                         String1 = rs.SpareString1,
                         Boolean3 = rs.SpareBoolean3 == null ? false : (bool)rs.SpareBoolean3,
-                        Date1 = DateTime.Parse(rs.SpareDate1),
-                        Date2 = DateTime.Parse(rs.SpareDate2),
+                        Date1 = rs.SpareDate1.ParseCustom(),
+                        Date2 = rs.SpareDate2.ParseCustom(),
                         String4 = rs.SpareString4,
                         String5 = rs.SpareString5,
                         String6 = rs.SpareString6,
@@ -120,8 +121,8 @@ namespace JsonConverter.Logic
                         },
                         ShipmentType = rs.ShipmentinfoShipmenttype
                     },
-                    OrderDate = DateTime.Parse(rs.Orderdate),
-                    DueDate = DateTime.Parse(rs.Duedate),
+                    OrderDate = rs.Orderdate.ParseCustom(),
+                    DueDate = rs.Duedate.ParseCustom(),
                     Notes = rs.Notes,
                     Consegnee = new Consegnee()
                     {
