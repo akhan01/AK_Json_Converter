@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using JsonConverter.Logic;
 using JsonConverter.Model;
+using JsonConverter.Model.ASN;
 using JsonConverter.Model.ItemMaster;
 using Newtonsoft.Json;
 using System.Reflection.Metadata;
@@ -16,6 +17,7 @@ while (exitCode.ToLower() != "exit")
     Console.WriteLine($"What would you like to convert? Enter the option number");
     Console.WriteLine($"1: Sales Order");
     Console.WriteLine($"2: Item Master");
+    Console.WriteLine($"3: Advanced Shipping Notice");
     string convertOption = Console.ReadLine();
 
     if (convertOption == "1")
@@ -78,6 +80,41 @@ while (exitCode.ToLower() != "exit")
                 Console.WriteLine($"");
                 Console.WriteLine($"");
                 Console.WriteLine(JsonConvert.SerializeObject(itemMaster));
+
+                Console.WriteLine($"");
+                Console.WriteLine($"Press Enter to continue");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ex.Message}. An error occured. Please also make sure your Date and Boolean are correctly entered in the template. Press Enter to try again");
+            }
+        }
+    }
+    else if (convertOption == "3")
+    {
+        Console.WriteLine("Please enter the excel file location path. For example 'C:\\Users\\akhan\\source\\repos\\Files\\shipmentorder001.xlsx'");
+        string filePath = Console.ReadLine();
+
+
+        if (filePath == null)
+        {
+            Console.WriteLine($"File Path not valid. Please retry again");
+        }
+        else
+        {
+            try
+            {
+                ExcelToJsonConverter excelToJsonConverter = new ExcelToJsonConverter();
+
+                string masterData = excelToJsonConverter.ConvertExcelToJson(filePath, 0);
+                string positionData = excelToJsonConverter.ConvertExcelToJson(filePath, 1);
+
+                List<ASNData> asnData = excelToJsonConverter.GenerateASN(masterData, positionData);
+
+                Console.WriteLine($"Generating Item Master JSON");
+                Console.WriteLine($"");
+                Console.WriteLine($"");
+                Console.WriteLine(JsonConvert.SerializeObject(asnData));
 
                 Console.WriteLine($"");
                 Console.WriteLine($"Press Enter to continue");
