@@ -375,7 +375,7 @@ namespace JsonConverter.Logic
 
             List<ASNData> asnData = new List<ASNData>();
 
-            foreach (RawASNData rd in rawMasterData)
+            foreach (RawASNData rd in rawMasterData.Where(a => !string.IsNullOrEmpty(a.ASN)))
             {
                 ASNData ad = new ASNData()
                 {

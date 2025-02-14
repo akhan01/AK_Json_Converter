@@ -7,6 +7,7 @@ namespace JsonConverter.Model.ASN
     // Root myDeserializedClass = JsonConvert.DeserializeObject<List<Root>>(myJsonResponse);
     public class RawASNPositionData
     {
+        [JsonProperty("ASN")]
         public string DocNumber { get; set; }
         public string Position { get; set; }
 

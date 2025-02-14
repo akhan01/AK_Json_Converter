@@ -114,7 +114,14 @@ while (exitCode.ToLower() != "exit")
                 Console.WriteLine($"Generating Item Master JSON");
                 Console.WriteLine($"");
                 Console.WriteLine($"");
-                Console.WriteLine(JsonConvert.SerializeObject(asnData));
+
+                var settings = new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    Formatting = Formatting.Indented
+                };
+
+                Console.WriteLine(JsonConvert.SerializeObject(asnData, settings));
 
                 Console.WriteLine($"");
                 Console.WriteLine($"Press Enter to continue");
