@@ -150,7 +150,8 @@ namespace JsonConverter.Logic
                             RefPersonMail = rs.ConsegneePartnerRefpersonmail,
                             BusinessName = rs.ConsegneePartnerBusinessname,
                             DeliveryInstructions = rs.ConsegneePartnerDeliveryinstructions,
-                            RefPerson = rs.ConsegneePartnerRefperson
+                            RefPerson = rs.ConsegneePartnerRefperson,
+                            ReferenceCode = string.Empty
                         }
                     },
                     Customer = new Consegnee()
@@ -174,7 +175,7 @@ namespace JsonConverter.Logic
                             RefPersonMail = rs.CustomerPartnerRefpersonmail,
                             BusinessName = rs.CustomerPartnerBusinessname,
                             RefPerson = rs.CustomerPartnerRefperson,
-                            ReferenceCode = rs.CustomerPartnerReferencecode
+                            ReferenceCode = string.IsNullOrEmpty(rs.CustomerPartnerReferencecode) ? string.Empty : rs.CustomerPartnerReferencecode
                         }
                     },
                     PaymentInfo = new PaymentInfo()
