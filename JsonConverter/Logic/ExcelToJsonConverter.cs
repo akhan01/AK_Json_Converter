@@ -1,5 +1,6 @@
 ﻿using JsonConverter.Extensions;
 using JsonConverter.Model;
+using JsonConverter.Model.ASN;
 using JsonConverter.Model.ItemMaster;
 using Newtonsoft.Json;
 using OfficeOpenXml;
@@ -100,7 +101,7 @@ namespace JsonConverter.Logic
                     {
                         Code = rs.SiteCode
                     },
-                    Reason = new Reason()
+                    Reason = new Model.Reason()
                     {
                         Code = rs.ReasonCode,
                         Company = new Model.Company()
@@ -110,7 +111,7 @@ namespace JsonConverter.Logic
                     },
                     ShipmentInfo = new ShipmentInfo()
                     {
-                        Carrier = new Carrier()
+                        Carrier = new Model.Carrier()
                         {
                             Code = rs.ShipmentinfoCarrierCode,
                             Partner = new CarrierPartner()
@@ -188,25 +189,25 @@ namespace JsonConverter.Logic
                     //Positions = GeneratePositionsData(positionsData)?.ToArray()
                 };
 
-                List<Position> positions = GeneratePositionsData(positionsData, rs.Ordernumber);
+                List<Model.Position> positions = GeneratePositionsData(positionsData, rs.Ordernumber);
                 shipmentOrder.Positions = positions?.ToArray();
                 shipmentOrders.Add(shipmentOrder);
             }
             return shipmentOrders;
         }
 
-        private List<Position> GeneratePositionsData(string data, string orderNumber)
+        private List<Model.Position> GeneratePositionsData(string data, string orderNumber)
         {
             List<RawPositionData> rawPositions = JsonConvert.DeserializeObject<List<RawPositionData>>(data);
 
-            List<Position> positions = new List<Position>();
+            List<Model.Position> positions = new List<Model.Position>();
 
             foreach(RawPositionData rd in rawPositions.Where(a => a.OrderNumber == orderNumber))
             {
-                positions.Add(new Position() 
+                positions.Add(new Model.Position() 
                 {
                     PosId = rd.Position,
-                    Item = new Item()
+                    Item = new Model.Item()
                     {
                         ItemNumber = rd.SkuCode,
                         Company = new Model.Company()
@@ -361,5 +362,148 @@ namespace JsonConverter.Logic
             return barcodes;
         }
         #endregion
+
+        #region ASN
+        public List<ASNData> GenerateASN(string masterData, string positionData)
+        {
+            List<RawASNData> rawMasterData = JsonConvert.DeserializeObject<List<RawASNData>>(masterData);
+
+            //RawShipmentData rs = rawShipmentOrders.FirstOrDefault();
+            if (rawMasterData.Count == 0)
+            {
+                throw new Exception("No Item Master data. Press Enter to try again");
+            }
+
+            List<ASNData> asnData = new List<ASNData>();
+
+            foreach (RawASNData rd in rawMasterData.Where(a => !string.IsNullOrEmpty(a.ASN)))
+            {
+                ASNData ad = new ASNData()
+                {
+                    type = "InboundAsn",
+                    inboundSite = new InboundSite()
+                    {
+                        code = rd.SiteCode
+                    },
+                    documentNumber = rd.ASN,
+                    company = new Model.ASN.Company()
+                    {
+                        code = rd.Companycode
+                    },
+                    docDate = DateTime.TryParse(rd.ETADate, out DateTime docDate) == true ? docDate : null,
+                    status = rd.Status,
+                    spare = new Model.ASN.Spare()
+                    {
+                        string6 = rd.AsnType,
+                        string1 = rd.EquipmentType,
+                        string2 = rd.ContainerTrailerNr,
+                        string4 = rd.HMRCReference,
+                        string7 = rd.CustomerAccount,
+                        string5 = rd.CustomerASNNumber
+                    },
+                    carrier = new Model.ASN.Carrier()
+                    {
+                        code = rd.PartnerCode,
+                        company = new Model.ASN.Company()
+                        {
+                            code = rd.CompanyCode
+                        }
+                    },
+                    reasonCode = new ReasonCode()
+                    {
+                        code = rd.ReasonCode,
+                        company = new Model.ASN.Company()
+                        {
+                            code = rd.CompanyCode
+                        }
+                    },
+                    positions = GenerateASNPositions(positionData, rd.ASN)
+
+                };
+                asnData.Add(ad);
+            }
+
+
+            return asnData;
+        }
+
+        private List<Model.ASN.Position> GenerateASNPositions(string rawPositions, string docNumber)
+        {
+            List<RawASNPositionData> rawPositionData = JsonConvert.DeserializeObject<List<RawASNPositionData>>(rawPositions);
+
+            List<Model.ASN.Position> asnPositions = new List<Model.ASN.Position>();
+
+            foreach (RawASNPositionData rd in rawPositionData.Where(a => a.DocNumber == docNumber))
+            {
+                asnPositions.Add(new Model.ASN.Position()
+                {
+                    positionId = rd.Position,
+                    expectedStock = new ExpectedStock()
+                    {
+                        item = new Model.ASN.Item()
+                        {
+                            itemNumber = rd.SKUcode,
+                            company = new Model.ASN.Company()
+                            {
+                                code = rd.Companycode
+                            }
+                        },
+                        quantity = Int32.TryParse(rd.Quantity, out int quantity) == true ? quantity : 0,
+                        packaging = new Packaging()
+                        {
+                            palletQty = Int32.TryParse(rd.PalletQty, out int pallerQty) == true ? pallerQty : null,
+                            palletType = new PalletType()
+                            {
+                                packageType = new PackageType()
+                                {
+                                    type = rd.PackageType
+                                }
+                            }
+                        },
+                        productionInfo = new ProductionInfo()
+                        {
+                            lotId = rd.Lot,
+                            expiryDate = rd.BBE,
+                            madeIn = rd.MadeIn
+                        },
+                        uom = rd.UoM,
+                        trackingInfo = new TrackingInfo()
+                        {
+                            bin = rd.HUCode
+                        }
+                    },
+                    reason = new Model.ASN.Reason()
+                    {
+                        code = rd.Code,
+                        company = new Model.ASN.Company()
+                        {
+                            code = rd.Companycode
+                        }
+                    },
+                    notes = rd.SSCC,
+                    spare = new Model.ASN.Spare()
+                    {
+                        string7 = rd.CountryofOrigin,
+                        string2 = rd.PONumber,
+                        string3 = rd.EntryNumber,
+                        string4 = rd.InvoiceNumber,
+                        string5 = rd.FactoryName,
+                        string6 = rd.GSP,
+                        string1 = rd.BondRegime,
+                        number1 = Double.TryParse(rd.UnitPrice, out double unitPrice) == true ? unitPrice : 0,
+                        number2 = Double.TryParse(rd.FreightCost, out double freightCost) == true ? freightCost : 0
+                    },
+                    custom = new Model.ASN.Custom()
+                    {
+                        stockStatus = rd.StockStatus,
+                        MasterPositionRef = rd.MasterPositionReference
+                    }
+                });
+            }
+            return asnPositions;
+        }
+        #endregion
+
+
     }
 }
