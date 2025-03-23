@@ -8,8 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="bin\Debug\net8.0\JsonConverter.deps.json" />
-    <Content Include="bin\Debug\net8.0\JsonConverter.runtimeconfig.json" />
     <Content Include="bin\Release\net8.0\JsonConverter.deps.json" />
     <Content Include="bin\Release\net8.0\JsonConverter.runtimeconfig.json" />
   </ItemGroup>
@@ -20,26 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="bin\Debug\net8.0\EPPlus.dll" />
-    <None Include="bin\Debug\net8.0\EPPlus.Interfaces.dll" />
-    <None Include="bin\Debug\net8.0\EPPlus.System.Drawing.dll" />
-    <None Include="bin\Debug\net8.0\JsonConverter.dll" />
     <None Include="bin\Debug\net8.0\JsonConverter.exe" />
-    <None Include="bin\Debug\net8.0\JsonConverter.pdb" />
-    <None Include="bin\Debug\net8.0\Microsoft.Extensions.Configuration.Abstractions.dll" />
-    <None Include="bin\Debug\net8.0\Microsoft.Extensions.Configuration.dll" />
-    <None Include="bin\Debug\net8.0\Microsoft.Extensions.Configuration.FileExtensions.dll" />
-    <None Include="bin\Debug\net8.0\Microsoft.Extensions.Configuration.Json.dll" />
-    <None Include="bin\Debug\net8.0\Microsoft.Extensions.FileProviders.Abstractions.dll" />
-    <None Include="bin\Debug\net8.0\Microsoft.Extensions.FileProviders.Physical.dll" />
-    <None Include="bin\Debug\net8.0\Microsoft.Extensions.FileSystemGlobbing.dll" />
-    <None Include="bin\Debug\net8.0\Microsoft.Extensions.Primitives.dll" />
-    <None Include="bin\Debug\net8.0\Microsoft.IO.RecyclableMemoryStream.dll" />
-    <None Include="bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll" />
-    <None Include="bin\Debug\net8.0\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll" />
-    <None Include="bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll" />
-    <None Include="bin\Debug\net8.0\System.Drawing.Common.dll" />
-    <None Include="bin\Debug\net8.0\System.Security.Cryptography.Pkcs.dll" />
     <None Include="bin\Release\net8.0\EPPlus.dll" />
     <None Include="bin\Release\net8.0\EPPlus.Interfaces.dll" />
     <None Include="bin\Release\net8.0\EPPlus.System.Drawing.dll" />
