@@ -9,6 +9,7 @@ namespace JsonConverter.Model
 {
     public partial class RawShipmentData
     {
+        [JsonProperty("@type")]
         public string @Type { get; set; }
         public string Ordernumber { get; set; }
         public string Orderref { get; set; }
