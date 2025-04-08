@@ -37,10 +37,10 @@ namespace JsonConverter.Model
         public ShipmentInfo ShipmentInfo { get; set; }
 
         [JsonProperty("orderDate")]
-        public DateTimeOffset? OrderDate { get; set; }
+        public object? OrderDate { get; set; }
 
         [JsonProperty("dueDate")]
-        public DateTimeOffset? DueDate { get; set; }
+        public object? DueDate { get; set; }
 
         [JsonProperty("notes")]
         public string Notes { get; set; }
@@ -289,10 +289,10 @@ namespace JsonConverter.Model
         public bool Boolean3 { get; set; }
 
         [JsonProperty("date1")]
-        public DateTimeOffset? Date1 { get; set; }
+        public object? Date1 { get; set; }
 
         [JsonProperty("date2")]
-        public DateTimeOffset? Date2 { get; set; }
+        public object? Date2 { get; set; }
 
         [JsonProperty("string4")]
         public string String4 { get; set; }

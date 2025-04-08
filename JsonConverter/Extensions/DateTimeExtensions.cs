@@ -9,15 +9,16 @@ namespace JsonConverter.Extensions
 {
     public static class DateTimeExtensions
     {
-        public static DateTime? ParseCustom(this string input)
+        public static string ParseCustom(this string input)
         {
             if (DateTime.TryParse(input, out DateTime result))
             {
-                return result;
+                result = result.Date;
+                return result.ToString("yyyy-MM-dd");
             }
             else
             {
-                return null;
+                return String.Empty;
             }
         }
     }
